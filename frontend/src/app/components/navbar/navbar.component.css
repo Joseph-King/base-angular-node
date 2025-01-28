@@ -1,0 +1,26 @@
+.navbar {
+    background-color: gray;
+    color: white;
+    font-size: x-large;
+
+    height: 3vh;
+    padding-top: 1rem;
+    padding-bottom: .2rem;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: lightgray;
+}
