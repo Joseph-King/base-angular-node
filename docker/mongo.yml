@@ -1,0 +1,11 @@
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:7.0.8-ubi9
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongoData:/data/db
+
+volumes:
+  mongoData:
+    driver: local

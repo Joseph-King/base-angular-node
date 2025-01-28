@@ -1,0 +1,6 @@
+services:
+  tika:
+    image: apache/tika:latest
+    restart: on-failure
+    ports:
+      - "9998:9998"
