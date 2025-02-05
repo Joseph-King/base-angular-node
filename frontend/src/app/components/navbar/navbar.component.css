@@ -3,7 +3,7 @@
     color: white;
     font-size: x-large;
 
-    height: 3vh;
+    height: 5rem;
     padding-top: 1rem;
     padding-bottom: .2rem;
 }
@@ -13,14 +13,35 @@ ul {
 }
 
 li {
-    display: inline;
+    display: inline !important;
 }
 
 a {
     color: white;
     text-decoration: none;
 }
-
 a:hover {
+    color: lightgray;
+}
+.router-text {
+    font-weight: bold;
+}
+
+h3 {
+    margin-top: -.75rem;
+}
+
+.btn-outline-light {
+    border: none;
+    background: none;
+
+    font-size: large;
+    margin-top: -.25rem;
+}
+
+.btn-outline-light:hover {
+    border: none;
+    background: none;
+
     color: lightgray;
 }

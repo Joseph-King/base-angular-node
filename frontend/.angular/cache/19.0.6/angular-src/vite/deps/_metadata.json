@@ -1,34 +1,58 @@
 {
-  "hash": "06c0a140",
-  "configHash": "02916ce1",
-  "lockfileHash": "7afcb4ac",
-  "browserHash": "3c124bd0",
+  "hash": "c83d4774",
+  "configHash": "14c9a3ea",
+  "lockfileHash": "3b096aea",
+  "browserHash": "a5ea0f9d",
   "optimized": {
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "03ca5544",
+      "fileHash": "9a9a242f",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "0bd1faa0",
+      "fileHash": "9562475e",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "0e44bef8",
+      "fileHash": "31447f25",
+      "needsInterop": false
+    },
+    "@fortawesome/angular-fontawesome": {
+      "src": "../../../../../../node_modules/@fortawesome/angular-fontawesome/fesm2022/angular-fontawesome.mjs",
+      "file": "@fortawesome_angular-fontawesome.js",
+      "fileHash": "ad02af6c",
+      "needsInterop": false
+    },
+    "@fortawesome/free-solid-svg-icons": {
+      "src": "../../../../../../node_modules/@fortawesome/free-solid-svg-icons/index.mjs",
+      "file": "@fortawesome_free-solid-svg-icons.js",
+      "fileHash": "e19ce401",
+      "needsInterop": false
+    },
+    "@ng-bootstrap/ng-bootstrap": {
+      "src": "../../../../../../node_modules/@ng-bootstrap/ng-bootstrap/fesm2022/ng-bootstrap.mjs",
+      "file": "@ng-bootstrap_ng-bootstrap.js",
+      "fileHash": "46d8d0d5",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-NGCBDHO2": {
-      "file": "chunk-NGCBDHO2.js"
+    "chunk-SL7LU4CY": {
+      "file": "chunk-SL7LU4CY.js"
     },
-    "chunk-LXZXBK57": {
-      "file": "chunk-LXZXBK57.js"
+    "chunk-2PFTZDNT": {
+      "file": "chunk-2PFTZDNT.js"
+    },
+    "chunk-DCQESLTX": {
+      "file": "chunk-DCQESLTX.js"
+    },
+    "chunk-WDMUDEB6": {
+      "file": "chunk-WDMUDEB6.js"
     }
   }
 }

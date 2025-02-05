@@ -1,4 +1,6 @@
 export const environment = {
     env: 'dev',
-    auth: 'jwt'
+    auth: 'jwt',
+
+    title:'base-angular-node'
 }

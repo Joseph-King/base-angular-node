@@ -1,15 +1,27 @@
 <div class="navbar">
-    <ul>
-        <!-- [ngClass]="{active: this.router.url === ''}" -->
-        <li class="ml-4" >
-            <a routerLink="/">Home</a>
-        </li>
-        <li class="ml-4">
-            <a routerLink="/admin">Admin</a>
-        </li>
-        <li class="ml-4">
-            <a routerLink="/profile">Profile</a>
-        </li>
-    </ul>
+    <div class="float-left ml-4">
+        <a routerLink="/"><h3>{{title}}</h3></a>
+    </div>
+    <div class="float-right">    
+        <ul>
+            <li class="ml-2" >
+                <a routerLink="/" class="router-text">
+                    Home
+                </a>
+            </li>
+            <li class="ml-2 mr-1">
+                <div ngbDropdown class="d-inline-block">
+                    <button type="button" class="btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle>
+                        <fa-icon [icon]="faCog"></fa-icon>
+                    </button>
+                    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem routerLink="/profile">Profile</button>
+                        <button ngbDropdownItem routerLink="/admin">Admin</button>
+                        <button ngbDropdownItem>Logout</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
 
