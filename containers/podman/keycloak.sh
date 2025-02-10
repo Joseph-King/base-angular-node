@@ -1,15 +1,15 @@
-podman network create keycloak
+podman network create dev
 
 podman volume create keycloak-data
 
-podman run -d --network keycloak --name keycloakdb \
+podman run -d --network dev --name keycloakdb \
     -v keycloak-data:/var/lib/postgresql/data \
     -e POSTGRES_DB=keycloak \
     -e POSTGRES_USER=keycloak \
     -e POSTGRES_PASSWORD=password \
     postgres:15
 
-podman run -d --network keycloak --name keycloak -p 8080:8080 \
+podman run -d --network dev --name keycloak -p 8080:8080 \
     -e KC_DB=postgres \
     -e KC_DB_URL=jdbc:postgresql://keycloakdb:5432/keycloak \
     -e KC_DB_USERNAME=keycloak \
