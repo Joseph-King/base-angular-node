@@ -3,9 +3,11 @@ services:
 
   # No SQL database
   elasticsearch:
-    build: ./elastic
+    build: 
+      context: ../config/elastic
+      dockerfile: Containerfile
     container_name: elasticsearch
-    env_file: ./elastic/.env
+    env_file: ../config/elastic/dev.env
     mem_limit: 2g
     ports:
       - "9200:9200"
@@ -23,7 +25,7 @@ services:
     container_name: kibana
     links:
       - "elasticsearch"
-    env_file: ./elastic/.env
+    env_file: ../config/elastic/dev.env
     depends_on:
       elasticsearch:
         condition: service_healthy

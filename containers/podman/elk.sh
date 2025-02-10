@@ -6,16 +6,17 @@ podman build --file ../config/elastic/Containerfile --tag elastic
 
 podman run -d --network dev --name elasticsearch \
     -p 9200:9200 \
-    -m 2g \
     -v es-data:/usr/share/elasticsearch/data \
-    -v ../config/elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml \
+    --env-file ./../config/elastic/dev.env \
     localhost/elastic:latest
 
 podman run -d --network dev --name kibana \
     -p 5601:5601 \
-    -e ELASTICSEARCH_PASSWORD=kibana \
+    --env-file ./../config/elastic/dev.env \
     docker.elastic.co/kibana/kibana:8.15.2
 
-
-    # -v ../config/elastic/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml \
-    # -e ELASTIC_PASSWORD=elastic \
+podman run -d --network dev --name logstash \
+    -p 5044:5044 \
+    -v ./../config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf \
+    -v ./../config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml \
+    docker.elastic.co/logstash/logstash:8.15.2
