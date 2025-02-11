@@ -1,0 +1,74 @@
+# Save the output of this file and use kubectl create -f to import
+# it into Kubernetes.
+#
+# Created with podman-5.3.2
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    io.kubernetes.cri-o.SandboxID/keycloak-db: 989e72a421291d4099d832c37704bc5e819f2a086e0379c53f34096bfca541c2
+    io.kubernetes.cri-o.SandboxID/keycloak-web: 989e72a421291d4099d832c37704bc5e819f2a086e0379c53f34096bfca541c2
+  creationTimestamp: "2025-02-11T21:47:39Z"
+  labels:
+    app: keycloak
+  name: keycloak
+spec:
+  containers:
+  - args:
+    - postgres
+    env:
+    - name: POSTGRES_DB
+      value: keycloak
+    - name: POSTGRES_USER
+      value: keycloak
+    - name: POSTGRES_PASSWORD
+      value: password
+    image: docker.io/library/postgres:17.2-alpine
+    name: keycloak-db
+    ports:
+    - containerPort: 8080
+      hostPort: 8080
+    volumeMounts:
+    - mountPath: /var/lib/postgresql/data
+      name: keycloak-data-pvc
+  - args:
+    - start-dev
+    env:
+    - name: KC_HOSTNAME_STRICT
+      value: "false"
+    - name: KC_HOSTNAME
+      value: localhost
+    - name: KC_HEALTH_ENABLED
+      value: "true"
+    - name: KEYCLOAK_ADMIN_PASSWORD
+      value: admin
+    - name: KEYCLOAK_ADMIN
+      value: admin
+    - name: KC_DB
+      value: postgres
+    - name: KC_HTTP_ENABLED
+      value: "true"
+    - name: KC_HOSTNAME_STRICT_HTTPS
+      value: "false"
+    - name: KC_DB_URL
+      value: jdbc:postgresql://keycloak-db:5432/keycloak
+    - name: KC_HOSTNAME_PORT
+      value: "8080"
+    - name: KC_DB_PASSWORD
+      value: password
+    - name: KC_DB_USERNAME
+      value: keycloak
+    - name: KC_METRICS_ENABLED
+      value: "true"
+    - name: KC_PROXY
+      value: edge
+    - name: KC_LOG_LEVEL
+      value: info
+    image: quay.io/keycloak/keycloak:latest
+    name: keycloak-web
+    securityContext:
+      runAsNonRoot: true
+  volumes:
+  - name: keycloak-data-pvc
+    persistentVolumeClaim:
+      claimName: keycloak-data

@@ -47,8 +47,8 @@ services:
       elasticsearch:
         condition: service_healthy
     volumes:
-      - ../config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ../config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ~/.podman/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ~/.podman/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
     ports:
       - "5044:5044"
 

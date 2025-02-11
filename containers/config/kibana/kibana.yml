@@ -1,3 +1,0 @@
-elasticsearch.hosts: []
-elasticsearch.username: "kibana_user"
-elasticsearch.password: "kibana"
