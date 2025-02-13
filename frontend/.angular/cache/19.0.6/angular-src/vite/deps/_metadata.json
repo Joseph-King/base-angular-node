@@ -1,55 +1,64 @@
 {
-  "hash": "c83d4774",
-  "configHash": "14c9a3ea",
-  "lockfileHash": "3b096aea",
-  "browserHash": "a5ea0f9d",
+  "hash": "c35ab5b1",
+  "configHash": "8a209374",
+  "lockfileHash": "b8837f94",
+  "browserHash": "c9a5f642",
   "optimized": {
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "9a9a242f",
+      "fileHash": "a0e9cdd3",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "9562475e",
+      "fileHash": "70a120ed",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "31447f25",
+      "fileHash": "1f7708d6",
       "needsInterop": false
     },
     "@fortawesome/angular-fontawesome": {
       "src": "../../../../../../node_modules/@fortawesome/angular-fontawesome/fesm2022/angular-fontawesome.mjs",
       "file": "@fortawesome_angular-fontawesome.js",
-      "fileHash": "ad02af6c",
+      "fileHash": "664759f3",
       "needsInterop": false
     },
     "@fortawesome/free-solid-svg-icons": {
       "src": "../../../../../../node_modules/@fortawesome/free-solid-svg-icons/index.mjs",
       "file": "@fortawesome_free-solid-svg-icons.js",
-      "fileHash": "e19ce401",
+      "fileHash": "fcf2a70a",
       "needsInterop": false
     },
     "@ng-bootstrap/ng-bootstrap": {
       "src": "../../../../../../node_modules/@ng-bootstrap/ng-bootstrap/fesm2022/ng-bootstrap.mjs",
       "file": "@ng-bootstrap_ng-bootstrap.js",
-      "fileHash": "46d8d0d5",
+      "fileHash": "3939510d",
+      "needsInterop": false
+    },
+    "keycloak-angular": {
+      "src": "../../../../../../node_modules/keycloak-angular/fesm2022/keycloak-angular.mjs",
+      "file": "keycloak-angular.js",
+      "fileHash": "1f9783c9",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-SL7LU4CY": {
-      "file": "chunk-SL7LU4CY.js"
+    "chunk-YCSV422O": {
+      "file": "chunk-YCSV422O.js"
     },
-    "chunk-2PFTZDNT": {
-      "file": "chunk-2PFTZDNT.js"
+    "chunk-NOBTLTV7": {
+      "file": "chunk-NOBTLTV7.js"
     },
-    "chunk-DCQESLTX": {
-      "file": "chunk-DCQESLTX.js"
+    "chunk-6ON2JJWK": {
+      "file": "chunk-6ON2JJWK.js"
+    },
+    "chunk-NVXEC5DN": {
+      "file": "chunk-NVXEC5DN.js"
     },
     "chunk-WDMUDEB6": {
       "file": "chunk-WDMUDEB6.js"

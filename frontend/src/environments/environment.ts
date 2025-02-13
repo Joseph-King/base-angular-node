@@ -1,6 +1,6 @@
 export const environment = {
     env: 'dev',
-    auth: 'jwt',
+    auth: 'keycloak',
     backend_url: '',
 
     title:'base-angular-node'
