@@ -35,6 +35,7 @@ const logEndpoint = async function(status, req, userData){
     
     let log = new Log(
         status,
+        message,
         req.originalUrl,
         req.params,
         userData ? userData.user : await getUserData(req)

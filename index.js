@@ -51,18 +51,18 @@ try {
 
 //Authentication
 try {
-	var auth = require(`./backend/auth/${process.env.AUTH}`);
-	console.log(`AUTH set to: ${process.env.AUTH}`);
+	var auth = require(`./backend/auth/${process.env.AUTHENTICATION}`);
+	console.log(`AUTH set to: ${process.env.AUTHENTICATION}`);
 } catch(err){
 	var auth = require(`./backend/auth/basic`);
-	console.log(`ERROR. Cannot set AUTH to target: ${process.env.AUTH}`);
+	console.log(`ERROR. Cannot set AUTH to target: ${process.env.AUTHENTICATION}`);
 }
 app.use(async (req, res, next) => {
 	const authHeader = req.headers.authorization;
 	console.log(`ORIGIN: ${req.headers.origin}`);
 	console.log(`PATH: ${req.originalUrl}`);
 
-	if(!authHeader && process.env.AUTH !== 'none' && process.env.AUTH !== 'jwt'){
+	if(!authHeader && process.env.AUTHENTICATION !== 'none' && process.env.AUTHENTICATION !== 'jwt'){
 		logger.logAuth(401, req, process.env, undefined);
 
 		console.log('AUTH_RES: !authHeader, Not Authenticated');
@@ -75,7 +75,7 @@ app.use(async (req, res, next) => {
 
 	try {
 		var result = undefined;
-		switch(process.env.AUTH){
+		switch(process.env.AUTHENTICATION){
 			case 'jwt':
 
 				var open_endpoints = JSON.parse(process.env.OPEN_ENDPOINTS)
@@ -90,10 +90,10 @@ app.use(async (req, res, next) => {
 			default:
 				result = await auth.authenticate(authHeader);
 		}
-		console.log(result);
 
 		if(result.res === true){
 			console.log('AUTH_RES: Authenticated');
+			req.user = result.user
 			next();
 		} else {
 			logger.logAuth(401, req, undefined);

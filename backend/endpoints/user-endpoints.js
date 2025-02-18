@@ -8,7 +8,7 @@ module.exports = function(app, logger, db){
                 let log = await logger.logEndpoint(200, req, undefined)
                 res.json(log);
             } else {
-                let log = await logger.logEndpoint(dbRes.status ? dbRes.status : 500, req, undefined)
+                let log = await logger.logEndpoint(dbRes.status ? dbRes.status : 500, dbRes.message ? dbRes.message : 'Unknown Error', req, undefined)
                 res.json(log);
             }
         } catch(err) {
@@ -23,7 +23,7 @@ module.exports = function(app, logger, db){
 
         try {
             let dbRes = await db.authenticateUser(username, password);
-
+            console.log(dbRes);
             res.send(dbRes);
         } catch(err) {
             console.log(err);
@@ -31,12 +31,12 @@ module.exports = function(app, logger, db){
         }
     })
 
-    app.get('/users/info', async (req, res) => {
-
-        logger.logEndpoint(200, req, undefined);
+    app.get('/users/profile', async (req, res) => {
+        logger.logEndpoint(200, 'test', req, undefined);
 
         res.send({
-            "message": `PROFILE`
+            "status": 200,
+            "user": req.user
         });
     })
 }

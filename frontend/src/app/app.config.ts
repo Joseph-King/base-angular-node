@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
 import { routes } from './app.routes';
 
@@ -9,15 +10,16 @@ import { environment } from '../environments/environment';
 var providersArr = [
   provideZoneChangeDetection({ eventCoalescing: true }), 
   provideRouter(routes), 
+  provideHttpClient()
 ]
 
-if(environment.auth === 'keycloak'){
+if(environment.authenticate === 'keycloak'){
   providersArr.push(
     provideKeycloak({
       config: {
-        url: 'http://localhost:8080',
-        realm: 'test',
-        clientId: 'test'
+        url: environment.keycloak.url,
+        realm: environment.keycloak.realm,
+        clientId: environment.keycloak.clientId
       },
       initOptions: {
         onLoad: 'login-required',

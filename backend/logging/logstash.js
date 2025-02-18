@@ -37,9 +37,10 @@ const logEndpoint = async function(status, req, userData){
     
     let log = new Log(
         status,
+        message,
         req.originalUrl,
         req.params,
-        user ? user : undefined
+        userData ? userData.user : await getUserData(req)
     );
     
     let url = `${process.env.LOGGER_URL}${process.env.ENV === 'development' ? 'server.dev' : 'server.prod'}`;

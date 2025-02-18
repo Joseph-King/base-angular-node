@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 
 const config = {
     database: process.env.DB_URL,
-    secret: process.env.DB_SECRET
+    secret: process.env.DB_SECRET,
+    token_secret: process.env.TOKEN_SECRET
 }
 
 const User = require(`./models/mongo/user`)
@@ -23,6 +24,18 @@ const testConnection = async function() {
 
 const registerUser = async function(body){
     return new Promise(async (resolve) => {
+        let findUserRes = await User.getUserByEmail(body.email);
+        if(findUserRes !== null){
+            resolve({status: 0, message: 'Email already exists'});
+            return;
+        }
+
+        findUserRes = await User.getUserByUsername(body.username);
+        if(findUserRes !== null){
+            resolve({status: 0, message: 'Username already exists'});
+            return;
+        }
+
         let addResult = await User.addUser(body);
 
         resolve(addResult);
@@ -40,15 +53,12 @@ const authenticateUser = async function(username, password){
                     firstName: authResult.firstName,
                     lastName: authResult.lastName,
                     username: authResult.username,
-                    password: authResult.password,
                     email: authResult.email,
                 }
-
-                let token = jwt.sign(user, config.secret, {
+                console.log(config.token_secret);
+                let token = jwt.sign({ data: user } , config.token_secret, {
                     expiresIn: 21600 //6 hours
                 });
-
-                delete user.password;
 
                 resolve({
                     res: true,

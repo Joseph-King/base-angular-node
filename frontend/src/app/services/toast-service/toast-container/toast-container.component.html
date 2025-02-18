@@ -1,0 +1,10 @@
+<div class="toast-container position-fixed top-2 end-0 p-3" style="z-index: 1200;">
+    @for (toast of this.toastService.toasts; track toast){
+        <ngb-toast  [class]="toast.classname"
+            header="{{toast.header}}" [autohide]="true"
+            [delay]="toast.delay || 5000"
+            (hidden)="toastService.remove(toast)">
+            {{toast.body}}
+        </ngb-toast>
+    }
+</div>

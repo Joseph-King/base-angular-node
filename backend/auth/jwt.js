@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const db = require(`../database/${process.env.DB}`);
 
 const config = {
-    secret: process.env.DB_SECRET
+    secret: process.env.TOKEN_SECRET
 }
 
 const testConnection = async function(){
@@ -15,15 +15,17 @@ const testConnection = async function(){
 const authenticate = async function(authHeader){
     return new Promise(async (resolve) => {
         try{
-            let token = authHeader.slice(4);
-            let decoded = jwt.verify(token, config.secret)
             let result = {
                 res: false,
                 user: undefined
             };
 
-            if(decoded && decoded.id && decoded.exp && (Date.now() < decoded.exp * 1000)){
-                let user = await db.getUserByID(decoded.id);
+            if(authHeader === undefined) return result;
+            let token = authHeader.slice(4);
+            let decoded = jwt.verify(token, config.secret);
+
+            if(decoded && decoded.exp && (Date.now() < decoded.exp * 1000)){
+                let user = await db.getUserByID(decoded.data.id);
 
                 if(user){
                     result = {

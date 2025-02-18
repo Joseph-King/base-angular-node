@@ -13,53 +13,70 @@ export class JwtService {
   backend_url: string = environment.backend_url;
 
   headers: HttpHeaders = new HttpHeaders({
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Authorization': ''
   });
 
   constructor(private router:Router, private http: HttpClient ) { }
 
-  canActivate(){
-    if(this.loggedIn()){
+  async canActivate(token: string){
+    if(await this.loggedIn(token)){
       return true;
     } else {
-      this.router.navigate(['/login']);
       return false;
     }
   }
 
   async registerUser(user: any){
-    return this.http.post(`${this.backend_url}users/register`, user, { headers: this.headers });
+    return new Promise((resolve, reject) => {
+      try {
+        this.http.post(`${this.backend_url}users/register`, user, { headers: this.headers })
+          .subscribe(
+            data => resolve(data),
+            error => resolve(error)
+          )
+      } catch(e) {
+        reject(e);
+      }
+    })
   }
 
-  authenticateUser(user: any){
-    return this.http.post(`${this.backend_url}users/authenticate`, user, {headers: this.headers});
+  async authenticateUser(user: any){
+    return new Promise((resolve, reject) => {
+      try {
+        this.http.post(`${this.backend_url}users/authenticate`, user, { headers: this.headers })
+          .subscribe(
+            data => resolve(data),
+            error => resolve(error)
+          )
+      } catch(e) {
+        reject(e);
+      }
+    })
   }
 
-  getProfile() {
-    this.loadToken();
-    this.headers.append('Authorization', this.authToken);
-    return this.http.get(`${this.backend_url}users/profile`, { headers: this.headers})
+  async getProfile(token: string) {
+    this.headers = this.headers.set('Authorization', token);
+    return new Promise((resolve, reject) => {
+      try {
+        this.http.get(`${this.backend_url}users/profile`, { headers: this.headers })
+          .subscribe(
+            data => resolve(data),
+            error => resolve(error)
+          )
+      } catch (e) {
+        reject(e);
+      }
+    })
   }
 
-  storeUserData(token: any, user: any) {
-    localStorage.setItem('id_token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    this.authToken = token;
-    this.user = user;
-  }
+  async loggedIn(token: string) {
+    let getProfileRes: any = await this.getProfile(token);
 
-  loadToken() {
-    const token = localStorage.getItem('id_token');
-    this.authToken = token;
-  }
-
-  loggedIn() {
+    if(getProfileRes !== undefined && getProfileRes.status == 200){
+      console.log('here');
+      return true;
+    }
     return false;
-  }
-
-  logout(){
-    this.authToken = null;
-    this.user = null;
-    localStorage.clear();
   }
 }

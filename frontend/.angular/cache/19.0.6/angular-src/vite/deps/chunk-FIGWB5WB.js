@@ -544,6 +544,12 @@ var HttpParams = class _HttpParams {
     }
   }
 };
+var HttpContextToken = class {
+  defaultValue;
+  constructor(defaultValue) {
+    this.defaultValue = defaultValue;
+  }
+};
 var HttpContext = class {
   map = /* @__PURE__ */ new Map();
   /**
@@ -2020,6 +2026,15 @@ function provideHttpClient(...features) {
   }
   return makeEnvironmentProviders(providers);
 }
+function withInterceptors(interceptorFns) {
+  return makeHttpFeature(HttpFeatureKind.Interceptors, interceptorFns.map((interceptorFn) => {
+    return {
+      provide: HTTP_INTERCEPTOR_FNS,
+      useValue: interceptorFn,
+      multi: true
+    };
+  }));
+}
 var LEGACY_INTERCEPTOR_FN = new InjectionToken(ngDevMode ? "LEGACY_INTERCEPTOR_FN" : "");
 function withInterceptorsFromDi() {
   return makeHttpFeature(HttpFeatureKind.LegacyInterceptors, [{
@@ -2064,6 +2079,27 @@ function withJsonpSupport() {
     provide: HTTP_INTERCEPTOR_FNS,
     useValue: jsonpInterceptorFn,
     multi: true
+  }]);
+}
+function withRequestsMadeViaParent() {
+  return makeHttpFeature(HttpFeatureKind.RequestsMadeViaParent, [{
+    provide: HttpBackend,
+    useFactory: () => {
+      const handlerFromParent = inject(HttpHandler, {
+        skipSelf: true,
+        optional: true
+      });
+      if (ngDevMode && handlerFromParent === null) {
+        throw new Error("withRequestsMadeViaParent() can only be used when the parent injector also configures HttpClient");
+      }
+      return handlerFromParent;
+    }
+  }]);
+}
+function withFetch() {
+  return makeHttpFeature(HttpFeatureKind.Fetch, [FetchBackend, {
+    provide: HttpBackend,
+    useExisting: FetchBackend
   }]);
 }
 var HttpClientXsrfModule = class _HttpClientXsrfModule {
@@ -2369,8 +2405,43 @@ function verifyMappedOrigin(url) {
 }
 
 export {
+  HttpHandler,
+  HttpBackend,
   HttpHeaders,
+  HttpUrlEncodingCodec,
+  HttpParams,
+  HttpContextToken,
+  HttpContext,
+  HttpRequest,
+  HttpEventType,
+  HttpResponseBase,
+  HttpHeaderResponse,
+  HttpResponse,
+  HttpErrorResponse,
+  HttpStatusCode,
+  HttpClient,
+  FetchBackend,
   HTTP_INTERCEPTORS,
+  HTTP_ROOT_INTERCEPTOR_FNS,
+  REQUESTS_CONTRIBUTE_TO_STABILITY,
+  HttpInterceptorHandler,
+  JsonpClientBackend,
+  JsonpInterceptor,
+  HttpXhrBackend,
+  HttpXsrfTokenExtractor,
+  HttpFeatureKind,
+  provideHttpClient,
+  withInterceptors,
+  withInterceptorsFromDi,
+  withXsrfConfiguration,
+  withNoXsrfProtection,
+  withJsonpSupport,
+  withRequestsMadeViaParent,
+  withFetch,
+  HttpClientXsrfModule,
+  HttpClientModule,
+  HttpClientJsonpModule,
+  HTTP_TRANSFER_CACHE_ORIGIN_MAP,
   withHttpTransferCache
 };
 /*! Bundled license information:
@@ -2382,4 +2453,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-NOBTLTV7.js.map
+//# sourceMappingURL=chunk-FIGWB5WB.js.map

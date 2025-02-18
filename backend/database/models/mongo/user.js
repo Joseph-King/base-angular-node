@@ -52,7 +52,22 @@ const getUserByUsername = async function(username){
             resolve(err);
         }
     })
-    
+}
+
+const getUserByEmail = async function(email){
+    return new Promise(async (resolve) => {
+        try {
+            const query = {
+                email: email
+            }
+
+            let queryRes = await User.findOne(query);
+
+            resolve(queryRes);
+        } catch(err) {
+            resolve(err);
+        }
+    })
 }
 
 const addUser = async function(body, callback){
@@ -88,4 +103,4 @@ const comparePassword = function(userInfo, password){
     return bcrypt.compareSync(password, userInfo.password);
 }
 
-module.exports = { getUserByID, getUserByUsername, addUser, comparePassword }
+module.exports = { getUserByID, getUserByUsername, getUserByEmail, addUser, comparePassword }

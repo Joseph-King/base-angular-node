@@ -1,16 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { JwtService } from './jwt-service/jwt.service';
-import { canActivateAuthRole } from './keycloak-service/keycloak.service';
+import { AuthService } from './auth.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthGuard implements CanActivate {
-  constructor (private router:Router){
+  environment = environment
+
+  constructor (private router: Router, private authService: AuthService){
 
   }
 
-  canActivate() {
+  async canActivate() {
+    let activateRes = await this.authService.canActivate();
+
+    if(activateRes){
+      return true;
+    }
+    
+    this.router.navigate(['/login']);
     return false;
   }
 }

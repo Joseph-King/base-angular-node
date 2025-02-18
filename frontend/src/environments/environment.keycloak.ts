@@ -1,6 +1,14 @@
 export const environment = {
     env: 'dev',
-    auth: 'keycloak',
+    authenticate: 'keycloak',
+    authorize: 'keycloak',
+    backend_url: '',
 
-    title:'base-angular-node'
+    title:'base-angular-node',
+
+    keycloak: {
+        url: 'http://localhost:8080',
+        realm: 'test',
+        clientId: 'test'
+    }
 }

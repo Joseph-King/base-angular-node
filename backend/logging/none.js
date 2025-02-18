@@ -8,10 +8,11 @@ const testConnection = async function(){
     })
 }
 
-const logEndpoint = async function(status, req, userData){
+const logEndpoint = async function(status, message, req, userData){
     
     let log = new Log(
         status,
+        message,
         req.originalUrl,
         req.params,
         userData ? userData.user : await getUserData(req)
