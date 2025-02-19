@@ -4,11 +4,11 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        required: true
+        required: false
     },
     lastName: {
         type: String,
-        required: true
+        required: false
     },
     username: {
         type: String,
@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     },
     email: {
         type: String,
+        required: false
+    },
+    roles: {
+        type: [ String ],
         required: true
     }
 })
@@ -72,11 +76,12 @@ const getUserByEmail = async function(email){
 
 const addUser = async function(body, callback){
     let newUser = new User({
-        firstName: body.firstName,
-        lastName: body.lastName,
+        firstName: body.firstName ? body.firstName : '',
+        lastName: body.lastName ? body.lastName : '',
         username: body.username,
         password: body.password,
-        email: body.email
+        email: body.email ? body.email: '',
+        roles: body.roles ? body.roles : []
     });
 
     return new Promise((resolve) => {

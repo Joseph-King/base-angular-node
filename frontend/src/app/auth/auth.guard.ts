@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
@@ -13,8 +13,9 @@ export class AuthGuard implements CanActivate {
 
   }
 
-  async canActivate() {
-    let activateRes = await this.authService.canActivate();
+  async canActivate(route: ActivatedRouteSnapshot) {
+    let path = route.data["path"] ? route.data["path"] : '';
+    let activateRes = await this.authService.canActivate(path);
 
     if(activateRes){
       return true;

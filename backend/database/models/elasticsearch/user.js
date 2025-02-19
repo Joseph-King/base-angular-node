@@ -57,11 +57,12 @@ const getUserByUsername = async function(username){
 
 const addUser = async function(body){
     let newUser = {
-        firstName: body.firstName,
-        lastName: body.lastName,
+        firstName: body.firstName ? body.firstName : body.firstName,
+        lastName: body.lastName ? body.lastName : body.lastName,
         username: body.username,
         password: body.password,
-        email: body.email
+        email: body.email ? body.email: '',
+        roles: body.roles ? body.roles : []
     }
 
     return new Promise((resolve) => {

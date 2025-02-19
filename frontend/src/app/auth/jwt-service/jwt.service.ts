@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
@@ -12,15 +12,21 @@ export class JwtService {
 
   backend_url: string = environment.backend_url;
 
+  protectedRoutes: any = environment.protectedRoutes;
+
   headers: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
     'Authorization': ''
   });
 
-  constructor(private router:Router, private http: HttpClient ) { }
+  constructor(private router: Router, private http: HttpClient ) { }
 
-  async canActivate(token: string){
+  async canActivate(token: string, user: any, path: string){
     if(await this.loggedIn(token)){
+      if(this.protectedRoutes[path] && !user.roles.includes(this.protectedRoutes[path])){
+        return false
+      }
+
       return true;
     } else {
       return false;
@@ -74,7 +80,6 @@ export class JwtService {
     let getProfileRes: any = await this.getProfile(token);
 
     if(getProfileRes !== undefined && getProfileRes.status == 200){
-      console.log('here');
       return true;
     }
     return false;

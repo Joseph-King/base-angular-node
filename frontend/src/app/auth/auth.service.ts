@@ -11,7 +11,11 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
   token: string = '';
+
   user: any = undefined;
+
+  loggedIn: boolean = false;
+  showAdmin: boolean = false;
 
   constructor(
     private jwtService: JwtService,
@@ -19,20 +23,30 @@ export class AuthService {
     private keycloakService: KeycloakAuthService,
     private toastService: ToastService) { }
 
-  async canActivate(){
+  async canActivate(path: string){
     return new Promise(async (resolve) => {
       try{
         if(this.token === '') this.token = `${localStorage.getItem('id_token')?.toString()}`;
         if(this.user === undefined) this.user = JSON.parse(`${localStorage.getItem('user')?.toString()}`);
       } catch(e) {
-        console.log('Not able to retrive local storage user data.');
-        resolve({ status: false })
+        resolve(false)
         return;
       }
 
       switch(environment.authorize){
         case 'jwt':
-          let res = await this.jwtService.canActivate(this.token);
+          let res = await this.jwtService.canActivate(this.token, this.user, path);
+
+          if(res === false){
+            this.loggedIn = false;
+            this.showAdmin = false;
+          } else {
+            this.loggedIn = true;
+            if(this.user.roles.includes(environment.protectedRoutes.admin)){
+              this.showAdmin = true;
+            }
+          }
+
           resolve(res);
           return;
         case 'hybrid':
@@ -86,6 +100,10 @@ export class AuthService {
 
         this.token = token;
         this.user = user;
+        this.loggedIn = true;
+        if(this.user.roles.includes(environment.protectedRoutes.admin)){
+          this.showAdmin = true;
+        }
         return;
       default:
         this.toastService.show('', 'Unable to save user data given authorization settings', 'bg-danger text-light');
@@ -101,6 +119,8 @@ export class AuthService {
     }
     this.token = '';
     this.user = undefined;
+    this.loggedIn = false;
+    this.showAdmin = false;
 
     localStorage.clear();
 

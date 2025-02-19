@@ -15,9 +15,12 @@
                         <fa-icon [icon]="faCog"></fa-icon>
                     </button>
                     <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownBasic1">
-                        <button ngbDropdownItem routerLink="/profile">Profile</button>
-                        <button ngbDropdownItem routerLink="/admin">Admin</button>
-                        <button ngbDropdownItem>Logout</button>
+                        <button ngbDropdownItem routerLink="/profile" [hidden]="!authService.loggedIn">Profile</button>
+                        <button ngbDropdownItem routerLink="/admin" [hidden]="!authService.loggedIn && !authService.showAdmin">Admin</button>
+                        <button ngbDropdownItem (click)="logoutUser()" [hidden]="!authService.loggedIn">Logout</button>
+
+                        <button ngbDropdownItem routerLink="/login" [hidden]="authService.loggedIn">Login</button>
+                        <button ngbDropdownItem routerLink="/register" [hidden]="authService.loggedIn">Register</button>
                     </div>
                 </div>
             </li>

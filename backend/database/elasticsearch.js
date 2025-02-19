@@ -65,6 +65,8 @@ const authenticateUser = async function(username, password){
                     username: authResult._source.username,
                     password: authResult._source.password,
                     email: authResult._source.email,
+                    roles: authResult._source.password,
+                    groups: authResult._source.email,
                 }
 
                 let token = jwt.sign(user, config.secret, {
@@ -98,7 +100,8 @@ const getUserByID = async function(id){
                 firstName: userRes.firstName,
                 lastName: userRes.lastName,
                 username: userRes.username,
-                email: userRes.email
+                email: userRes.email,
+                roles: userRes.roles
             }
 
             resolve(user);
@@ -108,4 +111,25 @@ const getUserByID = async function(id){
     })
 }
 
-module.exports = { testConnection, registerUser, authenticateUser, getUserByID }
+const getUserByUsername = async function(username){
+    return new Promise(async (resolve) => {
+        let userRes = await User.getUserByUsername(username);
+
+        if(userRes.username){
+            let user = {
+                id: id,
+                firstName: userRes.firstName,
+                lastName: userRes.lastName,
+                username: userRes.username,
+                email: userRes.email,
+                roles: userRes.roles
+            }
+
+            resolve(user);
+        } else {
+            resolve(undefined);
+        }
+    })
+}
+
+module.exports = { testConnection, registerUser, authenticateUser, getUserByID, getUserByUsername }
