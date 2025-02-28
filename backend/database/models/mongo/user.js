@@ -24,67 +24,28 @@ const UserSchema = new mongoose.Schema({
     },
     roles: {
         type: [ String ],
-        required: true
+        required: false
+    },
+    groups: {
+        type: [ String ],
+        required: false
     }
 })
 
 const User = mongoose.model("User", UserSchema);
 
-const getUserByID = function(id){
-    return new Promise(async (resolve) => {
-        try {
-            let queryRes = User.findById(id);
-
-            resolve(queryRes);
-        } catch (err) {
-            resolve(err);
-        }
-    })
-}
-
-const getUserByUsername = async function(username){
-    return new Promise(async (resolve) => {
-        try {
-            const query = {
-                username: username
-            }
-
-            let queryRes = await User.findOne(query);
-
-            resolve(queryRes);
-        } catch(err) {
-            resolve(err);
-        }
-    })
-}
-
-const getUserByEmail = async function(email){
-    return new Promise(async (resolve) => {
-        try {
-            const query = {
-                email: email
-            }
-
-            let queryRes = await User.findOne(query);
-
-            resolve(queryRes);
-        } catch(err) {
-            resolve(err);
-        }
-    })
-}
-
-const addUser = async function(body, callback){
+const addUser = async function(body){
     let newUser = new User({
         firstName: body.firstName ? body.firstName : '',
         lastName: body.lastName ? body.lastName : '',
         username: body.username,
         password: body.password,
         email: body.email ? body.email: '',
-        roles: body.roles ? body.roles : []
+        roles: body.roles ? body.roles : [],
+        groups: body.groups ? body.groups : []
     });
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         try {
             bcrypt.genSalt(10, async (err, salt) => {                                                     
                 if(err) throw err;
@@ -94,12 +55,13 @@ const addUser = async function(body, callback){
                     
                     newUser.password = hash;
                     let addRes = await newUser.save();
-                    console.log(addRes);
-                    resolve({status: 200});
+                    // console.log(addRes);
+
+                    resolve(addRes);
                 })
             })
         } catch(err) {
-            resolve(err);
+            reject(err);
         }
     })
 }
@@ -108,4 +70,78 @@ const comparePassword = function(userInfo, password){
     return bcrypt.compareSync(password, userInfo.password);
 }
 
-module.exports = { getUserByID, getUserByUsername, getUserByEmail, addUser, comparePassword }
+const getUsers = function(){
+    return new Promise((resolve, reject) => {
+        try {
+            let getRes = User.find();
+
+            resolve(getRes);
+        } catch(err) {
+            reject(err);
+        }
+    })
+}
+
+const getUserByID = function(id){
+    return new Promise(async (resolve, reject) => {
+        try {
+            let queryRes = User.findById(id);
+
+            resolve(queryRes);
+        } catch (err) {
+            reject(err);
+        }
+    })
+}
+
+const getUserByUsername = async function(username){
+    return new Promise(async (resolve, reject) => {
+        try {
+            const query = {
+                username: username
+            }
+
+            let queryRes = await User.findOne(query);
+
+            resolve(queryRes);
+        } catch(err) {
+            reject(err);
+        }
+    })
+}
+
+const getUserByEmail = async function(email){
+    return new Promise(async (resolve, reject) => {
+        try {
+            const query = {
+                email: email
+            }
+
+            let queryRes = await User.findOne(query);
+
+            resolve(queryRes);
+        } catch(err) {
+            reject(err);
+        }
+    })
+}
+
+const getUsersByRole = async function(role){
+    return new Promise(async(resolve, reject) => {
+        try {
+            const query = {
+                roles: [ role._id ]
+            }
+
+            let queryRes = await User.find(query);
+
+            resolve(queryRes);
+        } catch(err) {
+            reject(err);
+        }
+    })
+}
+
+module.exports = { addUser, comparePassword, 
+    getUsers, getUserByID, getUserByUsername, getUserByEmail, getUsersByRole
+}

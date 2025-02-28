@@ -39,4 +39,16 @@ module.exports = function(app, logger, db){
             "user": req.user
         });
     })
+
+    app.get('/users', async (req, res) => {
+        try {
+            let dbRes = await db.getUsers();
+
+            console.log(dbRes);
+            res.send(dbRes);
+        } catch {
+            console.log(err);
+            res.send({status: 500, message: 'Unable to retrieve users'});
+        }
+    })
 }

@@ -7,7 +7,9 @@ const config = {
     token_secret: process.env.TOKEN_SECRET
 }
 
-const User = require(`./models/mongo/user`)
+const User = require(`./models/mongo/user`);
+const Role = require ('./models/mongo/roles');
+const Group = require('./models/mongo/groups');
 
 const testConnection = async function() {
     return new Promise((resolve, reject) => {
@@ -22,25 +24,7 @@ const testConnection = async function() {
     })
 }
 
-const registerUser = async function(body){
-    return new Promise(async (resolve) => {
-        let findUserRes = await User.getUserByEmail(body.email);
-        if(findUserRes !== null){
-            resolve({status: 0, message: 'Email already exists'});
-            return;
-        }
-
-        findUserRes = await User.getUserByUsername(body.username);
-        if(findUserRes !== null){
-            resolve({status: 0, message: 'Username already exists'});
-            return;
-        }
-
-        let addResult = await User.addUser(body);
-
-        resolve(addResult);
-    })
-}
+//USER FUNCTIONS
 
 const authenticateUser = async function(username, password){
     return new Promise(async (resolve) => {
@@ -54,9 +38,10 @@ const authenticateUser = async function(username, password){
                     lastName: authResult.lastName,
                     username: authResult.username,
                     email: authResult.email,
-                    roles: authResult.roles
+                    roles: authResult.roles,
+                    groups: authResult.groups
                 }
-                console.log(config.token_secret);
+
                 let token = jwt.sign({ data: user } , config.token_secret, {
                     expiresIn: 21600 //6 hours
                 });
@@ -76,6 +61,28 @@ const authenticateUser = async function(username, password){
     })
 }
 
+const deleteUser = async function(user){
+    return new Promise((resolve) => {
+        console.log(user);
+        // let checkAdmin = User.getUsersByRole()
+    })
+}
+
+const editUser = async function(user){
+    return new Promise((resolve) => {
+        resolve('editUsers');
+    })
+}
+
+const getUsers = async function(){
+    return new Promise(async (resolve) => {
+        let userRes = await User.getUsers();
+
+        console.log(userRes);
+        resolve(userRes);
+    })
+}
+
 const getUserByID = async function(id){
     return new Promise(async (resolve) => {
         let userRes = await User.getUserByID(id);
@@ -87,7 +94,8 @@ const getUserByID = async function(id){
                 lastName: userRes.lastName,
                 username: userRes.username,
                 email: userRes.email,
-                roles: userRes.roles
+                roles: userRes.roles,
+                groups: userRes.groups
             }
 
             resolve(user);
@@ -113,7 +121,8 @@ const getUserByUsername = async function(username){
                 lastName: userRes.lastName,
                 username: userRes.username,
                 email: userRes.email,
-                roles: userRes.roles
+                roles: userRes.roles,
+                groups: userRes.groups
             }
 
             resolve(user);
@@ -123,4 +132,141 @@ const getUserByUsername = async function(username){
     })
 }
 
-module.exports = { testConnection, registerUser, authenticateUser, getUserByID, getUserByUsername }
+const registerUser = async function(body){
+    return new Promise(async (resolve) => {
+        let findUserRes = await User.getUserByEmail(body.email);
+        if(findUserRes !== null){
+            resolve({status: 0, message: 'Email already exists'});
+            return;
+        }
+
+        findUserRes = await User.getUserByUsername(body.username);
+        if(findUserRes !== null){
+            resolve({status: 0, message: 'Username already exists'});
+            return;
+        }
+
+        let addResult = await User.addUser(body);
+        
+        resolve(addResult);
+    })
+}
+
+//ROLE FUNCTIONS
+
+const addRole = function(body){
+    return new Promise(async (resolve) => {
+        let addResult = await Role.addRole(body);
+
+        resolve(addResult);
+    })
+}
+
+const deleteRole = function(role){
+    return new Promise(async (resolve) => {
+        if(role.name === 'admin'){
+            resolve({status: 405, message: 'Admin role is a protected role. Cannot be deleted'});
+        }
+
+        let doesUserHaveRole = await User.getUsersByRole(role);
+        console.log(doesUserHaveRole);
+
+        resolve('deleteRole');
+    })
+}
+
+const editRole = function(role){
+    return new Promise((resolve) => {
+        resolve('editRole');
+    })
+}
+
+const getRoles = function(){
+    return new Promise((resolve) => {
+        resolve('getRoles');
+    })
+}
+
+const getRoleByID = function(id){
+    return new Promise(async (resolve) => {
+        let roleRes = await Role.getRoleByID(id);
+
+        if(roleRes._id){
+            let role = {
+                id: roleRes._id,
+                name: roleRes.name
+            }
+
+            resolve(role);
+        } else {
+            resolve(undefined);
+        }
+    })
+}
+
+const getRoleByName = function(name){
+    return new Promise(async (resolve) => {
+        let roleRes = await Role.getRoleByName(name);
+
+        if(roleRes === null){
+            resolve(null);
+            return;
+        }
+
+        if(roleRes._id){
+            let role = {
+                id: roleRes._id,
+                name: roleRes.name
+            }
+
+            resolve(role);
+        } else {
+            resolve(undefined);
+        }
+    })
+}
+
+//GROUP FUNCTIONS
+
+const addGroup = function(body){
+    return new Promise((resolve) => {
+        resolve('addGroup');
+    })
+}
+
+const deleteGroup = function(role){
+    return new Promise((resolve) => {
+        resolve('deleteGroup');
+    })
+}
+
+const editGroup = function(role){
+    return new Promise((resolve) => {
+        resolve('editGroup');
+    })
+}
+
+const getGroups = function(){
+    return new Promise((resolve) => {
+        resolve('getGroups');
+    })
+}
+
+const getGroupByID = function(id){
+    return new Promise((resolve) => {
+        resolve('getGroupByID');
+    })
+}
+
+const getGroupByName = function(name){
+    return new Promise((resolve) => {
+        resolve('getGroupsByName');
+    })
+}
+
+module.exports = { 
+    testConnection, 
+    authenticateUser,  deleteUser, editUser, getUsers, getUserByID, getUserByUsername, registerUser,
+    addRole, deleteRole, editRole, getRoles, getRoleByID, getRoleByName,
+    addGroup, deleteGroup, editGroup, getGroups, getGroupByID, getGroupByName,
+}

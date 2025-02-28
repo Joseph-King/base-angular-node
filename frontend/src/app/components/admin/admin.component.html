@@ -1,1 +1,46 @@
-<p>admin works!</p>
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs ml-3 mr-3 mt-2">
+	<li [ngbNavItem]="1">
+		<button ngbNavLink>Users</button>
+		<ng-template ngbNavContent>
+			<app-users></app-users>
+		</ng-template>
+	</li>
+	<li [ngbNavItem]="2">
+		<button ngbNavLink>Roles</button>
+		<ng-template ngbNavContent>
+			<app-roles></app-roles>
+		</ng-template>
+	</li>
+	<li [ngbNavItem]="3">
+		<button ngbNavLink>Groups</button>
+		<ng-template ngbNavContent>
+            <app-groups></app-groups>
+		</ng-template>
+	</li>
+    <li [ngbNavItem]="4">
+		<button ngbNavLink>Logs</button>
+		<ng-template ngbNavContent>
+            <app-logs></app-logs>
+		</ng-template>
+	</li>
+    <li [ngbNavItem]="5">
+		<button ngbNavLink>API</button>
+		<ng-template ngbNavContent>
+            <app-api></app-api>
+		</ng-template>
+	</li>
+	<li [ngbNavItem]="6">
+		<button ngbNavLink>Support</button>
+		<ng-template ngbNavContent>
+            <app-support-requests></app-support-requests>
+		</ng-template>
+	</li>
+	<li [ngbNavItem]="7">
+		<button ngbNavLink>SMTP</button>
+		<ng-template ngbNavContent>
+            <app-smtp></app-smtp>
+		</ng-template>
+	</li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-2 ml-3 mr-3"></div>

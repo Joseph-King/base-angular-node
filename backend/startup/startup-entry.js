@@ -1,5 +1,6 @@
 const testConnections = require('./test-connections');
-const createInitUser = require('./create-initial-user');
+const createAdminUser = require('./create-admin-user');
+const createAdminRole = require('./create-admin-role');
 
 const start = async function(auth, logger, db){
     
@@ -12,8 +13,16 @@ const start = async function(auth, logger, db){
         process.exit(1);
     }
 
-    console.log('\nCreating Initial User');
-    let initUserResp = await createInitUser(db);
+    console.log('\nCreating Admin Role');
+    let initAdminRole = await createAdminRole(db);
+
+    if(initAdminRole && !initAdminRole.adminName){
+        console.log('Admin role not found or created... Terminating Server');
+        process.exit(1);
+    }
+    
+    console.log('\nCreating Admin User');
+    let initAdminUser = await createAdminUser(db, initAdminRole.adminName);
 }
 
 //All functions that are being exported
