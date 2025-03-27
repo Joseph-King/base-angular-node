@@ -91,6 +91,7 @@ export class AuthService {
   }
 
   storeUserData(token: string, user: any){
+    console.log(user);
     switch(environment.authorize){
       case 'keycloak':
       case 'jwt':

@@ -16,7 +16,7 @@ const start = async function(auth, logger, db){
     console.log('\nCreating Admin Role');
     let initAdminRole = await createAdminRole(db);
 
-    if(initAdminRole && !initAdminRole.adminName){
+    if(initAdminRole.status !== 200){
         console.log('Admin role not found or created... Terminating Server');
         process.exit(1);
     }

@@ -6,30 +6,22 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class RolesService {
 
   headers: HttpHeaders = new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': ''
-  });
+      'Content-Type': 'application/json',
+      'Authorization': ''
+    });
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  getUsers() {
+  getRoles() {
     return new Promise((resolve, reject) => {
       this.headers = this.headers.set('Authorization', this.authService.getToken())
       try {
-        this.http.get(`${environment.backend_url}users`, { headers: this.headers })
+        this.http.get(`${environment.backend_url}roles`, { headers: this.headers })
           .subscribe(
-            data => {
-              let users: any = data
-
-              if(users.status){
-                reject(users)
-              }
-
-              resolve(users)
-            },
+            data => resolve(data),
             error => resolve(error)
           )
       } catch(err) {
@@ -37,5 +29,4 @@ export class UserService {
       }
     })
   }
- 
 }

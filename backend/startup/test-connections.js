@@ -1,3 +1,5 @@
+const dbTest = require(`../database/${process.env.DB}/test`);
+
 module.exports = async function(auth, logger, db){
     let result = {
         successfulConnections: [],
@@ -39,7 +41,7 @@ module.exports = async function(auth, logger, db){
 
     //DB
     try{
-        let dbRes = await db.testConnection();
+        let dbRes = await dbTest.testConnection();
 
         if(dbRes.startsWith('N/A') || dbRes.startsWith('SUCCESS')){
             result.successfulConnections.push('db');

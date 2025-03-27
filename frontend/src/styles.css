@@ -1,5 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
+.btn-border-none {
+    border: none !important;
+}
+
 .ml-0 {
     margin-left: 0 !important;
 }

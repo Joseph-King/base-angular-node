@@ -43,7 +43,7 @@ if(process.env.ENV === 'development'){
 
 //Database
 try {
-	var db = require(`./backend/database/${process.env.DB}`);
+	var db = require(`./backend/database/db`);
 	console.log(`DATABASE set to: ${process.env.DB}`);
 } catch(e){
 	console.log(`ERROR. Cannot set DATABASE to target: ${process.env.LOGGER}`);
@@ -77,15 +77,13 @@ app.use(async (req, res, next) => {
 		var result = undefined;
 		switch(process.env.AUTHENTICATION){
 			case 'jwt':
-
-				var open_endpoints = JSON.parse(process.env.OPEN_ENDPOINTS)
-				console.log(open_endpoints);
+				var open_endpoints = JSON.parse(process.env.OPEN_ENDPOINTS);
 				if(open_endpoints.includes(req.originalUrl)){
 					console.log('AUTH: PATH is open.');
 					return next();
 				}
-
-				result = await auth.authenticate(authHeader, db);
+				
+				result = await auth.authenticate(authHeader);
 				break;
 			default:
 				result = await auth.authenticate(authHeader);
@@ -96,7 +94,7 @@ app.use(async (req, res, next) => {
 			req.user = result.user
 			next();
 		} else {
-			logger.logAuth(401, req, undefined);
+			logger.logAuth(401, 'index.js line 98', req, undefined);
 
 			console.log('AUTH_RES: auth.res != true, Not Authenticated');
 			let err = new Error('You are not authenticated!');
@@ -116,8 +114,9 @@ app.use(async (req, res, next) => {
 app.use(express.static(path.join(__dirname, 'client')))
 
 //Endpoints
-const testEndpoints = require('./backend/endpoints/test-endpoints')(app, logger, db);
-const userEndpoints = require('./backend/endpoints/user-endpoints')(app, logger, db);
+const testEndpoints = require('./backend/endpoints/test-endpoints')(app, logger);
+const userEndpoints = require('./backend/endpoints/user-endpoints')(app, logger);
+const roleEndpoints = require('./backend/endpoints/role-endpoints')(app, logger);
 
 const port = 3000;
 app.listen(port, () => {

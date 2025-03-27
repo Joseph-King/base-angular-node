@@ -25,9 +25,10 @@ const logEndpoint = async function(status, message, req, userData){
     })
 }
 
-const logAuth = async function(status, req, user){
+const logAuth = async function(status, message, req, user){
     let log = new Log(
         status,
+        message,
         req.originalUrl,
         req.params,
         user ? user : undefined

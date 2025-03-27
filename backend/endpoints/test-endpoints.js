@@ -1,4 +1,6 @@
-module.exports = function(app, logger, db){
+const dbTest = require(`../database/${process.env.DB}/test`)
+
+module.exports = function(app, logger){
 
     //Check if can reach Backend
     app.get('/test', async (req, res) => {
@@ -23,7 +25,7 @@ module.exports = function(app, logger, db){
     app.get('/test-db', async (req, res) => {
         logger.logEndpoint(200, req, undefined);
         
-        let result = await db.testConnection();
+        let result = await dbTest.testConnection();
 
         res.send(result);
     })

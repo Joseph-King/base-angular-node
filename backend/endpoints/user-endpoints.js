@@ -1,20 +1,16 @@
-module.exports = function(app, logger, db){
+const dbUsers = require(`../database/${process.env.DB}/user`)
 
-    app.post('/users/register', async (req, res) => {
+module.exports = function(app, logger){
+
+    app.get('/users', async (req, res) => {
         try {
-            let dbRes = await db.registerUser(req.body);
+            let dbRes = await dbUsers.getUsers(null, null);
 
-            if(dbRes && dbRes.status && dbRes.status === 200){
-                let log = await logger.logEndpoint(200, req, undefined)
-                res.json(log);
-            } else {
-                let log = await logger.logEndpoint(dbRes.status ? dbRes.status : 500, dbRes.message ? dbRes.message : 'Unknown Error', req, undefined)
-                res.json(log);
-            }
+            res.send(dbRes);
         } catch(err) {
             console.log(err);
+            res.send({status: 500, message: 'Unable to retrieve users'});
         }
-
     })
 
     app.post('/users/authenticate', async (req, res) => {
@@ -22,7 +18,7 @@ module.exports = function(app, logger, db){
         const password = req.body.password;
 
         try {
-            let dbRes = await db.authenticateUser(username, password);
+            let dbRes = await dbUsers.authenticateUser(username, password);
             console.log(dbRes);
             res.send(dbRes);
         } catch(err) {
@@ -40,15 +36,20 @@ module.exports = function(app, logger, db){
         });
     })
 
-    app.get('/users', async (req, res) => {
+    app.post('/users/register', async (req, res) => {
         try {
-            let dbRes = await db.getUsers();
+            let dbRes = await dbUsers.addUser(req.body);
 
-            console.log(dbRes);
-            res.send(dbRes);
-        } catch {
+            if(dbRes && dbRes.status && dbRes.status === 200){
+                let log = await logger.logEndpoint(200, req, undefined)
+                res.json(log);
+            } else {
+                let log = await logger.logEndpoint(dbRes.status ? dbRes.status : 500, dbRes.message ? dbRes.message : 'Unknown Error', req, undefined)
+                res.json(log);
+            }
+        } catch(err) {
             console.log(err);
-            res.send({status: 500, message: 'Unable to retrieve users'});
         }
+
     })
 }

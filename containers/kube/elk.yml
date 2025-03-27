@@ -51,18 +51,18 @@ spec:
       runAsNonRoot: true
     volumeMounts:
     - mountPath: /usr/share/logstash/pipeline/logstash.conf
-      name: home-jking-.podman-logstash-logstash.conf-host-0
+      name: podman-logstash-logstash.conf-host-0
     - mountPath: /usr/share/logstash/config/logstash.yml
-      name: home-jking-.podman-logstash-logstash.yml-host-1
+      name: podman-logstash-logstash.yml-host-1
   volumes:
   - name: es-data-pvc
     persistentVolumeClaim:
       claimName: es-data
   - hostPath:
-      path: /home/jking/.podman/logstash/logstash.conf
+      path: /Users/analyst/.podman/logstash/logstash.conf
       type: File
-    name: home-jking-.podman-logstash-logstash.conf-host-0
+    name: podman-logstash-logstash.conf-host-0
   - hostPath:
-      path: /home/jking/.podman/logstash/logstash.yml
+      path: /Users/analyst/.podman/logstash/logstash.yml
       type: File
-    name: home-jking-.podman-logstash-logstash.yml-host-1
+    name: podman-logstash-logstash.yml-host-1

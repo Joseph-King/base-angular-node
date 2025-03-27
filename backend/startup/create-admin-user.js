@@ -1,18 +1,23 @@
+const dbUsers = require(`../database/${process.env.DB}/user`)
+const dbRoles = require(`../database/${process.env.DB}/roles`)
+
 module.exports = async function(db, adminName){
     return new Promise(async (resolve, reject) => {
         console.log('Checking if Admin User exists...')
-        let checkUser = await db.getUserByUsername(process.env.ADMIN_USERNAME);
+        let checkUser = await dbUsers.getUserByUsername(process.env.ADMIN_USERNAME);
+        let getAdminRole = await dbRoles.getRoleByName(adminName);
 
-        if(checkUser === null){
+        if(checkUser === null && getAdminRole !== null){
             console.log('Admin User has not been created. Creating now...');
             try {
                 let user = {
                     username: process.env.ADMIN_USERNAME,
                     password: process.env.ADMIN_PASSWORD,
-                    roles: [ adminName ]
+                    roles: [ adminName ],
+                    roleIDs: [ getAdminRole._id ]
                 }
 
-                let registerUser = await db.registerUser(user);
+                let registerUser = await dbUsers.addUser(user);
 
                 if(registerUser.username === user.username){
                     console.log('SUCCESS. Admin User created');
@@ -22,6 +27,7 @@ module.exports = async function(db, adminName){
                     resolve({ status: 500 });
                 }
             } catch(e) {
+                console.log(e);
                 console.log('ERROR. creating Admin User');
                 resolve({ status: 500 });
             }

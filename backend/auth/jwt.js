@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const db = require(`../database/${process.env.DB}`);
+const dbUsers = require(`../database/${process.env.DB}/user`);
 
 const config = {
     secret: process.env.TOKEN_SECRET
@@ -25,7 +25,7 @@ const authenticate = async function(authHeader){
             let decoded = jwt.verify(token, config.secret);
 
             if(decoded && decoded.exp && (Date.now() < decoded.exp * 1000)){
-                let user = await db.getUserByID(decoded.data.id);
+                let user = await dbUsers.getUserByID(decoded.data.id);
 
                 if(user){
                     result = {

@@ -1,5 +1,58 @@
 <div>
-    <button class="btn btn-primary">
-        Create User
-    </button>
+    <div *ngIf="!getUsersError">
+        <button class="btn btn-primary mb-2">
+            Add User
+        </button>
+    </div>
+    <div *ngIf="!getUsersError" class="mb-3 d-flex">
+        <input
+            type="text"
+            class="form-control w-25"
+            name="searchUser"
+            [(ngModel)]="searchUser"
+        />
+        <button class="btn btn-primary ms-2">
+            <fa-icon [icon]="faSearch"></fa-icon>
+        </button>
+    </div>
+    <div>
+        <table *ngIf="!getUsersError" class="table table-striped w-50">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 30%">Username</th>
+                    <th scope="col" style="width: 30%">Email</th>
+                    <th scope="col" style="width: 30%">Roles</th>
+                    <th scope="col" style="width: 10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (user of users; track user._id){
+                    <tr>
+                        <td class="align-middle">{{ user.username }}</td>
+                        <td class="align-middle">{{ user.email }} </td>
+                        <td class="align-middle">{{ user.roles }} </td>
+                        <td class="">
+                            <div ngbDropdown class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-outline-dark btn-border-none" id="ellipsis" ngbDropdownToggle>
+                                    <fa-icon [icon]="faEllipsis"></fa-icon>
+                                </button>
+                                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="ellipsis">
+                                    <button ngbDropdownItem >Edit</button>
+                                    <button [disabled]="users.length == 1" ngbDropdownItem >Delete</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="4" style="text-align: center">No users found</td>
+                    </tr>
+                }
+                
+            </tbody>
+        </table>
+        <div *ngIf="getUsersError" class="text-danger">
+            <span>**There was an error retrieving users**</span>
+        </div>
+    </div>
 </div>

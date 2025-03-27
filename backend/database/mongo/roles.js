@@ -21,7 +21,7 @@ const addRole = async function(body, callback){
             // console.log('Saved New Role');
             // console.log(addRes);
 
-            resolve(addRes);
+            resolve({status: 201});
         } catch(err) {
             reject(err);
         }

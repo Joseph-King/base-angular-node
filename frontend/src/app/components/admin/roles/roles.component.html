@@ -1,1 +1,52 @@
-<p>roles works!</p>
+<div>
+    <div>
+        <button class="btn btn-primary mb-2">
+            Add Role
+        </button>
+    </div>
+    <div class="mb-3 d-flex">
+        <input
+            type="text"
+            class="form-control w-25"
+            name="searchRole"
+            [(ngModel)]="searchRole"
+        />
+        <button class="btn btn-primary ms-2">
+            <fa-icon [icon]="faSearch"></fa-icon>
+        </button>
+    </div>
+    <div>
+        <table *ngIf="roles.length !== 0" class="table table-striped w-50">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (role of roles; track role._id){
+                    <tr>
+                        <td class="align-middle">{{ role.name }}</td>
+                        <td class="">
+                            <div ngbDropdown class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-outline-dark btn-border-none" 
+                                id="ellipsis" ngbDropdownToggle>
+                                    <fa-icon [icon]="faEllipsis"></fa-icon>
+                                </button>
+                                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="ellipsis">
+                                    <button ngbDropdownItem >Edit</button>
+                                    <button [disabled]="roles.length == 1" ngbDropdownItem >Delete</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="3" style="text-align: center">No roles found</td>
+                    </tr>
+                }
+                
+            </tbody>
+        </table>
+    </div>
+</div>
